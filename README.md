@@ -73,6 +73,3 @@ The program can be compiled and executed, but it currently operates with placeho
 3.  To choose which algorithm to run, edit the `main.cpp` file, comment/uncomment the desired `run_...()` function, and recompile using `make`.
 
 ---
-
-## License
-This project is available under the CeCILL License.
