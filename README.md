@@ -47,7 +47,7 @@ To build and run this project, you will need the following dependencies installe
 
 1.  **Clone the Repository:**
     ```bash
-    git clone <[your-repository-url](https://github.com/felipevidias/grain-segmentation-cpp.git)>
+    git clone <https://github.com/felipevidias/grain-segmentation-cpp.git>
     cd <grain-segmentation-cpp>
     ```
 2.  **Install Dependencies:** Ensure all required libraries are installed.
