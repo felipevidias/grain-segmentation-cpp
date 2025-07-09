@@ -91,4 +91,4 @@ target_link_libraries(grain_analysis PRIVATE
 # ====================================================================
 
 message(STATUS "CMake configuration complete. Run 'make' to build.")
-message(STATUS "ℹUsing Pink from: ${PINK_ROOT}")
+message(STATUS "Using Pink from: ${PINK_ROOT}")
