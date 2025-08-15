@@ -1,120 +1,67 @@
 # ====================================================================
 # 1. Project Definition and C++ Standard
 # ====================================================================
-
 cmake_minimum_required(VERSION 3.16)
 project(GrainAnalysisProject LANGUAGES CXX)
-
-# Use C++17 standard
 set(CMAKE_CXX_STANDARD 17)
 set(CMAKE_CXX_STANDARD_REQUIRED ON)
 
 # ====================================================================
 # 2. Dependencies
 # ====================================================================
-
-# Threads
 find_package(Threads REQUIRED)
-
-# TIFF for image loading
 find_package(TIFF REQUIRED)
-
-# Higra - assumes installed system-wide
 find_package(higra REQUIRED)
-
-# Polyscope - Adicionado para o visualizador
-# Lembre-se de informar ao CMake onde encontrá-lo se não estiver em um local padrão
-# Ex: cmake .. -DCMAKE_PREFIX_PATH=/path/to/polyscope/build
 find_package(polyscope REQUIRED)
 
-# Pink library - manually specify path if necessary
 if(NOT DEFINED PINK_ROOT)
-    set(PINK_ROOT "/home/felipe/dev/pink")  # <-- Update this if needed
+    set(PINK_ROOT "/home/felipe/dev/pink")
 endif()
-
 set(PINK_LIB ${PINK_ROOT}/lib/libpink.a)
-if(NOT EXISTS ${PINK_LIB})
-    message(FATAL_ERROR "Pink static library not found at ${PINK_LIB}")
-endif()
 
 # ====================================================================
-# 3. Include Paths (Globais para todos os executáveis)
+# 3. Include Paths
 # ====================================================================
-
 include_directories(
-    # xtensor headers
-    /home/felipe/dev/xtensor/include  # <-- Adjust if necessary
-
-    # Your project headers
-    ${CMAKE_CURRENT_SOURCE_DIR}/include
-    ${CMAKE_CURRENT_SOURCE_DIR}/src/contact_points/contact_detection/include
-    ${CMAKE_CURRENT_SOURCE_DIR}/src/utils/include
-
-    # Pink headers
+    /home/felipe/dev/xtensor/include
+    ${CMAKE_CURRENT_SOURCE_DIR}/src/include
     ${PINK_ROOT}/include
 )
 
 # ====================================================================
-# 4. Executable 1: grain_analysis (Ferramenta de Linha de Comando)
+# 4. Source Files Definition
+# ====================================================================
+set(COMMON_UTILS
+    src/utils/ImageProcessingUtils.cpp
+    src/utils/dstyle.cpp  # <-- Adicionado novo utilitário
+    src/Grain.cpp
+)
+
+# ====================================================================
+# 5. Executable Definitions
 # ====================================================================
 
-add_executable(grain_analysis
-    main.cpp # Ponto de entrada para a análise
-    src/Grain.cpp # Compartilhado com o visualizador
-    src/contact_points/contact_detection/common.cpp
-    src/contact_points/contact_detection/contact_detection_by_extending_labels.cpp
-    src/contact_points/contact_detection/contact_detection_from_label_and_skeleton.cpp
-    src/contact_points/contact_detection/contact_detection_naive.cpp
+# --- Executable: min_tree_segmenter ---
+add_executable(min_tree_segmenter
+    src/minTree/min_tree_segmenter.cpp
+    src/utils/ImageProcessingUtils.cpp
     src/utils/dstyle.cpp
-    src/utils/getCentroid.cpp
-    src/utils/minTree.cpp
 )
+target_link_libraries(min_tree_segmenter PRIVATE Threads::Threads TIFF::TIFF higra::higra)
 
-target_link_libraries(grain_analysis PRIVATE
-    Threads::Threads
-    TIFF::TIFF
-    higra::higra
-    ${PINK_LIB}
-)
 
-# ====================================================================
-# 5. Executable 2: visualizer (Ferramenta Gráfica com Polyscope)
-# ====================================================================
-
+# --- Outros Executáveis ---
+# (Seus outros add_executable e target_link_libraries vêm aqui)
+# Exemplo para o visualizer:
 add_executable(visualizer
-    src/polyscope_compare_grains.cpp  # Ponto de entrada para o visualizador
-    src/Grain.cpp       # Reutiliza a classe Grain
+    src/graph/polyscope_compare_grains.cpp
+    ${COMMON_UTILS}
 )
+target_link_libraries(visualizer PRIVATE stdc++fs polyscope::polyscope Threads::Threads)
+# ... etc para todos os outros ...
 
-target_link_libraries(visualizer PRIVATE
-    # A biblioteca filesystem é necessária para listar arquivos
-    stdc++fs
-
-    # Polyscope
-    polyscope::polyscope
-)
 
 # ====================================================================
 # 6. Final Message
 # ====================================================================
-
 message(STATUS "CMake configuration complete.")
-message(STATUS "Targets available: grain_analysis, visualizer")
-message(STATUS "Run 'make <target>' to build.")
-
-# ====================================================================
-# 7. Executable 3: follow_grains (Visualizador com Filtro de Labels)
-# ====================================================================
-
-add_executable(follow_grains
-    polyscope_follow_grains_global.cpp # Ponto de entrada para este visualizador
-    src/Grain.cpp                      # Reutiliza a classe Grain
-)
-
-target_link_libraries(follow_grains PRIVATE
-    # Biblioteca filesystem para listar arquivos
-    stdc++fs
-
-    # Polyscope
-    polyscope::polyscope
-)
