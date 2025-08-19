@@ -4,11 +4,11 @@
  *
  * This file provides a consolidated interface for various utilities used across the project, including:
  * - Reading and writing 3D TIFF images (grayscale and RGB) using xtensor.
- * - Structs for data representation (e.g., Centroid).
+ * - Structs for data representation (e.g., Centroid, CylinderBounds).
  * - Wrappers for image processing libraries (e.g., PINK).
  * - Functions for data analysis (e.g., calculating centroids).
  * - CSV file I/O for centroids.
- * - Image cropping and pasting utilities based on the original Python project.
+ * - Image cropping, pasting, and manipulation utilities.
  */
 
  #ifndef IMAGE_PROCESSING_UTILS_H
@@ -30,6 +30,14 @@
  struct Centroid {
      int x, y, z;
      int label;
+ };
+ 
+ /**
+  * @struct CylinderBounds
+  * @brief Holds the calculated boundary coordinates for a cylinder region in a 2D slice.
+  */
+ struct CylinderBounds {
+     int ydl, yul, ydr, yur, x_start, x_end;
  };
  
  
@@ -85,9 +93,25 @@
   */
  xt::xtensor<uint32_t, 3> label_components(const xt::xtensor<uint8_t, 3>& image, int& num_components);
  
+ /**
+  * @brief Performs a morphological area closing on a 3D binary image.
+  * @note This is a wrapper for a function from the PINK image processing library.
+  * @param binary_image The input 3D binary image.
+  * @return The image after the area closing operation.
+  */
+ xt::xtensor<uint8_t, 3> area_closing(const xt::xtensor<uint8_t, 3>& binary_image);
+ 
+ /**
+  * @brief Computes the exact Euclidean Distance Transform (EDT) of a binary image.
+  * @note This is a wrapper for a function from the PINK image processing library.
+  * @param binary_image The input 3D binary image.
+  * @return A 3D float image where each pixel's value is its distance to the nearest background pixel.
+  */
+ xt::xtensor<float, 3> distance_transform_edt(const xt::xtensor<uint8_t, 3>& binary_image);
+ 
  
  // ====================================================================
- // Centroid, CSV, and Crop Functions
+ // Analysis and Manipulation Functions
  // ====================================================================
  
  /**
@@ -113,34 +137,25 @@
  
  /**
   * @brief Crops a cube around the point (x, y, z) in the given 3D image.
-  * @note This implementation mimics the Python version, returning a view that may
-  * be smaller than crop_size if the center is near an edge.
   */
  template<typename T>
  xt::xtensor<T, 3> cropAroundPoint(const xt::xtensor<T, 3>& image, int cx, int cy, int cz, int crop_size);
  
  /**
   * @brief Pastes a labeled crop back into a larger image.
-  * @note Only pixels in the crop that are non-zero are pasted, using the main grain's label.
   */
  void positioning_label(xt::xtensor<uint32_t, 3>& labeled_image, const xt::xtensor<uint32_t, 3>& labeled_crop,
                         const Centroid& centroid, int crop_size);
  
  /**
- * @brief Performs a morphological area closing on a 3D binary image.
- * Removes dark holes smaller than a default connectivity-based area.
- * @note This is a wrapper for a function from the PINK image processing library.
- * @param binary_image The input 3D binary image (0s and 1s or 0s and 255s).
- * @return The image after the area closing operation.
- */
-xt::xtensor<uint8_t, 3> area_closing(const xt::xtensor<uint8_t, 3>& binary_image);
-
-/**
- * @brief Computes the exact Euclidean Distance Transform (EDT) of a binary image.
- * @note This is a wrapper for a function from the PINK image processing library.
- * @param binary_image The input 3D binary image.
- * @return A 3D float image where each pixel's value is its distance to the nearest background pixel.
- */
-xt::xtensor<float, 3> distance_transform_edt(const xt::xtensor<uint8_t, 3>& binary_image);
-
-#endif // IMAGE_PROCESSING_UTILS_H
+  * @brief Scans a 2D image slice to find the physical boundaries of a cylinder.
+  */
+ CylinderBounds find_cylinder_bounds(const xt::xtensor<uint16_t, 3>& image, size_t z_slice, bool is_upper_cylinder);
+ 
+ /**
+  * @brief Fills a quadrilateral area in a 2D slice with a specified grayscale value.
+  */
+ void write_quadshape_in_greyscale(xt::xtensor<uint16_t, 3>& image, const CylinderBounds& bounds, size_t z_slice, uint16_t greyscale);
+ 
+ 
+ #endif // IMAGE_PROCESSING_UTILS_H

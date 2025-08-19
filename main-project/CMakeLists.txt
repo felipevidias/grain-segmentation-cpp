@@ -15,7 +15,7 @@ find_package(higra REQUIRED)
 find_package(polyscope REQUIRED)
 
 if(NOT DEFINED PINK_ROOT)
-    set(PINK_ROOT "/home/felipe/dev/pink")
+    set(PINK_ROOT "/home/felipe/dev/pink") # <-- ATTENTION: Adjust this path if necessary
 endif()
 set(PINK_LIB ${PINK_ROOT}/lib/libpink.a)
 
@@ -23,7 +23,7 @@ set(PINK_LIB ${PINK_ROOT}/lib/libpink.a)
 # 3. Include Paths
 # ====================================================================
 include_directories(
-    /home/felipe/dev/xtensor/include # <-- ATENÇÃO: Ajuste este caminho se necessário
+    /home/felipe/dev/xtensor/include # <-- ATTENTION: Adjust this path if necessary
     ${CMAKE_CURRENT_SOURCE_DIR}/src/include
     ${PINK_ROOT}/include
 )
@@ -31,10 +31,11 @@ include_directories(
 # ====================================================================
 # 4. Source Files Definition
 # ====================================================================
-# Define uma lista de arquivos de utilidade comuns para evitar repetição
+# Define a list of common utility files to avoid repetition
 set(COMMON_UTILS
     src/utils/ImageProcessingUtils.cpp
     src/utils/dstyle.cpp
+    src/utils/print_process_bar.cpp
     src/Grain.cpp
 )
 
@@ -42,7 +43,7 @@ set(COMMON_UTILS
 # 5. Executable Definitions
 # ====================================================================
 
-# --- Pipelines Principais de Segmentação ---
+# --- Main Segmentation Pipelines ---
 add_executable(watershed
     src/watershed/watershed.cpp
     src/utils/ImageProcessingUtils.cpp
@@ -57,7 +58,7 @@ add_executable(successive_watershed
 target_link_libraries(successive_watershed PRIVATE Threads::Threads TIFF::TIFF)
 
 
-# --- Ferramentas de Análise e Pré-processamento ---
+# --- Analysis and Pre-processing Tools ---
 add_executable(min_tree_segmenter
     src/minTree/min_tree_segmenter.cpp
     src/utils/ImageProcessingUtils.cpp
@@ -77,8 +78,27 @@ add_executable(get_centroid_app
 )
 target_link_libraries(get_centroid_app PRIVATE Threads::Threads TIFF::TIFF higra::higra ${PINK_LIB})
 
+add_executable(cylinder_centroid_adder
+    src/removal_utils/apply_cylinder_centroid_label.cpp
+    src/utils/ImageProcessingUtils.cpp
+)
+target_link_libraries(cylinder_centroid_adder PRIVATE TIFF::TIFF stdc++fs)
 
-# --- Ferramentas de Pós-processamento e Visualização ---
+add_executable(remove_cylinders_app
+    src/removal_utils/remove_cylinders.cpp
+    src/utils/ImageProcessingUtils.cpp
+    src/utils/print_process_bar.cpp
+)
+target_link_libraries(remove_cylinders_app PRIVATE Threads::Threads TIFF::TIFF stdc++fs)
+
+add_executable(rotate_x_axis_app
+    src/transform/rotateXaxis.cpp
+    src/utils/ImageProcessingUtils.cpp
+)
+target_link_libraries(rotate_x_axis_app PRIVATE Threads::Threads TIFF::TIFF stdc++fs)
+
+
+# --- Post-processing and Visualization Tools ---
 add_executable(colormap_applier
     colormap_applier.cpp
     src/utils/ImageProcessingUtils.cpp
