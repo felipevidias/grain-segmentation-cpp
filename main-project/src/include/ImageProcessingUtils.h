@@ -16,7 +16,7 @@
  
  #include <string>
  #include <vector>
- #include "xtensor/xtensor.hpp"
+ #include "xtensor/core/xtensor.hpp"
  
  // ====================================================================
  // Data Structures

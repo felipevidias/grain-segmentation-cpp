@@ -1,0 +1,14 @@
+/home/felipe/IC-Silvio/C++/main-project/build/CMakeFiles/watershed.dir
+/home/felipe/IC-Silvio/C++/main-project/build/CMakeFiles/successive_watershed.dir
+/home/felipe/IC-Silvio/C++/main-project/build/CMakeFiles/min_tree_segmenter.dir
+/home/felipe/IC-Silvio/C++/main-project/build/CMakeFiles/max_tree_segmenter.dir
+/home/felipe/IC-Silvio/C++/main-project/build/CMakeFiles/get_centroid_app.dir
+/home/felipe/IC-Silvio/C++/main-project/build/CMakeFiles/cylinder_centroid_adder.dir
+/home/felipe/IC-Silvio/C++/main-project/build/CMakeFiles/remove_cylinders_app.dir
+/home/felipe/IC-Silvio/C++/main-project/build/CMakeFiles/rotate_x_axis_app.dir
+/home/felipe/IC-Silvio/C++/main-project/build/CMakeFiles/colormap_applier.dir
+/home/felipe/IC-Silvio/C++/main-project/build/CMakeFiles/image_viewer.dir
+/home/felipe/IC-Silvio/C++/main-project/build/CMakeFiles/visualizer.dir
+/home/felipe/IC-Silvio/C++/main-project/build/CMakeFiles/follow_grains.dir
+/home/felipe/IC-Silvio/C++/main-project/build/CMakeFiles/edit_cache.dir
+/home/felipe/IC-Silvio/C++/main-project/build/CMakeFiles/rebuild_cache.dir

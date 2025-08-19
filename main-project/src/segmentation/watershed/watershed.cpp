@@ -16,7 +16,7 @@
  #include <filesystem>
  
  // xtensor and higra
- #include "xtensor/xio.hpp"
+#include "xtensor/io/xio.hpp"
  #include "xtensor/xview.hpp"
  #include "xtensor/xadapt.hpp"
  #include "xtensor/xoperation.hpp"

@@ -1,5 +1,5 @@
-#include "include/getCentroid.hpp"
-#include "src/include/common.hpp" // For the Image3D struct
+#include "getCentroid.hpp"
+#include "common.hpp" // For the Image3D struct
 
 #include <iostream>
 #include <vector>

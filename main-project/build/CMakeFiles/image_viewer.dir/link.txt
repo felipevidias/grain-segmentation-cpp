@@ -1,0 +1,1 @@
+/usr/bin/c++ -Wl,--dependency-file=CMakeFiles/image_viewer.dir/link.d CMakeFiles/image_viewer.dir/src/segmentation/viewImage/viewImage.cpp.o CMakeFiles/image_viewer.dir/src/segmentation/utils/ImageProcessingUtils.cpp.o -o image_viewer  /usr/lib/libtiff.so /home/felipe/dev/polyscope/build/lib/libpolyscope.a /home/felipe/dev/polyscope/build/deps/glfw/src/libglfw3.a

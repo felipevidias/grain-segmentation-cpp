@@ -1,0 +1,1 @@
+/usr/bin/c++ -Wl,--dependency-file=CMakeFiles/get_centroid_app.dir/link.d CMakeFiles/get_centroid_app.dir/src/contact_points/utils/getCentroid.cpp.o CMakeFiles/get_centroid_app.dir/src/segmentation/utils/ImageProcessingUtils.cpp.o -o get_centroid_app  /usr/lib/libtiff.so

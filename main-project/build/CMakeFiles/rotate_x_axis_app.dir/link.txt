@@ -1,0 +1,1 @@
+/usr/bin/c++ -Wl,--dependency-file=CMakeFiles/rotate_x_axis_app.dir/link.d CMakeFiles/rotate_x_axis_app.dir/src/removal_utils/rotateXaxis.cpp.o CMakeFiles/rotate_x_axis_app.dir/src/segmentation/utils/ImageProcessingUtils.cpp.o -o rotate_x_axis_app  /usr/lib/libtiff.so -lstdc++fs
